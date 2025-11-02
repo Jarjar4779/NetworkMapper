@@ -1,0 +1,64 @@
+{
+  "name": "network-mapper",
+  "version": "1.0.0",
+  "description": "Network Mapper Tool",
+  "author": "Jared Booker",
+  "main": "electron-main.js",
+  "bin": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:electron": "electron .",
+    "build:pkg": "pkg . --targets node18-win-x64 --output dist/network-mapper.exe",
+    "build:pkg-mac": "pkg . --targets node18-macos-x64 --output dist/network-mapper-macos",
+    "build": "electron-builder --win nsis",
+    "build:mac": "electron-builder --mac",
+    "build:mac-packager": "electron-packager . 'Network Mapper' --platform=darwin --arch=x64 --out=dist --overwrite --icon=build/icon.icns",
+    "build:generic": "electron-builder"
+  },
+  "dependencies": {
+    "chokidar": "^3.5.3",
+    "express": "^4.18.2",
+    "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "electron": "^26.6.10",
+    "electron-builder": "^24.13.3",
+    "electron-packager": "^17.1.2",
+    "pkg": "^5.8.0"
+  },
+  "pkg": {
+    "assets": [
+      "index.html",
+      "styles.css",
+      "app.js",
+      "*.json",
+      "map_images/**"
+    ]
+  },
+  "build": {
+    "appId": "com.Jared.networkmapper",
+    "productName": "Network Mapper",
+    "files": [
+      "electron-main.js",
+      "server.js",
+      "index.html",
+      "styles.css",
+      "app.js",
+      "map_images/**/*",
+      "*.json"
+    ],
+    "directories": {
+      "buildResources": "build"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}

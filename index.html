@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Mapper - Drag & Drop Tool</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <!-- Property Manager -->
+            <div class="sidebar-section">
+                <h3>Properties</h3>
+                <div id="propertiesList"></div>
+                <button onclick="openNewPropertyModal()">+ New Property</button>
+            </div>
+            
+            <!-- Node Palette -->
+            <div class="sidebar-section">
+                <h3>Add Devices</h3>
+                <div class="node-palette">
+                    <div class="palette-node" draggable="true" data-type="root">
+                        <div class="palette-node-icon" style="background: #ef4444;"></div>
+                        <div class="palette-node-label">Headend</div>
+                    </div>
+                    <div class="palette-node" draggable="true" data-type="ap">
+                        <div class="palette-node-icon" style="background: #3b82f6;"></div>
+                        <div class="palette-node-label">Access Point</div>
+                    </div>
+                    <div class="palette-node" draggable="true" data-type="switch">
+                        <div class="palette-node-icon" style="background: #10b981;"></div>
+                        <div class="palette-node-label">Switch</div>
+                    </div>
+                    <div class="palette-node" draggable="true" data-type="cpe">
+                        <div class="palette-node-icon" style="background: #f59e0b;"></div>
+                        <div class="palette-node-label">CPE</div>
+                    </div>
+                    <div class="palette-node" draggable="true" data-type="client">
+                        <div class="palette-node-icon" style="background: #8b5cf6;"></div>
+                        <div class="palette-node-label">Client</div>
+                    </div>
+                    <div class="palette-node" draggable="true" data-type="router">
+                        <div class="palette-node-icon" style="background: #ec4899;"></div>
+                        <div class="palette-node-label">Router</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="sidebar-section">
+                <h3>Actions</h3>
+                <button onclick="toggleConnectionMode()" id="connectBtn" class="secondary">🔗 Connect Nodes</button>
+                <button onclick="clearAllNodes()" style="background: #ef4444;">Clear All Nodes</button>
+                <button onclick="exportConfig()" class="success">💾 Export Config</button>
+                <button onclick="importConfig()" class="secondary">📂 Import Config</button>
+            </div>
+            
+            <!-- Node Editor -->
+            <div class="sidebar-section" id="nodeEditor" style="display: none;">
+                <h3>Edit Node</h3>
+                <label>Name:</label>
+                <input type="text" id="editNodeName" placeholder="e.g., 4-125-cpe">
+                <label>IP Address:</label>
+                <input type="text" id="editNodeIP" placeholder="e.g., 192.168.20.101">
+                <button onclick="updateSelectedNode()" class="success">Update Node</button>
+                <button onclick="deleteSelectedNode()" style="background: #ef4444;">Delete Node</button>
+                <button onclick="deselectNode()" class="secondary">Cancel</button>
+            </div>
+        </div>
+        
+        <!-- Canvas Area -->
+        <div id="canvasArea">
+            <div id="toolbar">
+                <button onclick="zoomIn()">➕ Zoom In</button>
+                <button onclick="zoomOut()">➖ Zoom Out</button>
+                <button onclick="resetView()">🎯 Reset View</button>
+                <button onclick="toggleConnections()" id="toggleConnBtn">👁️ Hide Lines</button>
+                <div class="zoom-display">
+                    <span id="zoomLevel">100%</span>
+                </div>
+            </div>
+            
+            <div id="modeIndicator">
+                Click two nodes to connect them (parent → child)
+            </div>
+            
+            <div id="mapContainer">
+                <img id="mapImage" src="" alt="Upload a map to get started">
+                <div id="connections"></div>
+                <div id="nodes"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modals -->
+    <div id="newPropertyModal" class="modal">
+        <div class="modal-content">
+            <h2>Create New Property</h2>
+            <label>Property Name:</label>
+            <input type="text" id="newPropertyName" placeholder="e.g., Office">
+            <label>Upload Map Image:</label>
+            <input type="file" id="mapFileInput" accept="image/*">
+            <div class="modal-buttons">
+                <button onclick="createProperty()" class="success">Create</button>
+                <button onclick="closeModal()" class="secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- New Node Modal -->
+    <div id="newNodeModal" class="modal">
+        <div class="modal-content">
+            <h2>Add Node</h2>
+            <label>Label:</label>
+            <input type="text" id="newNodeLabel" placeholder="Node name">
+            <label>IP Address:</label>
+            <input type="text" id="newNodeIP" placeholder="e.g., 192.168.20.101">
+            <div class="modal-buttons">
+                <button id="createNodeBtn" class="success">Add Node</button>
+                <button onclick="closeNewNodeModal()" class="secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <input type="file" id="importFileInput" accept=".json" style="display: none;">
+    
+    <script src="app.js"></script>
+</body>
+</html>
+ 
