@@ -7,3 +7,6 @@ npm install
 
 # Start Server
 npm start
+
+# Use Program
+Visit http://localhost:3000
